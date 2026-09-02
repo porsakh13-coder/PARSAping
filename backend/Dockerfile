@@ -1,16 +1,10 @@
-FROM node:20-alpine AS base
+FROM node:20-alpine
 WORKDIR /app
-
-# wireguard-tools + iputils (ping) for real key generation, peer management, health checks
-RUN apk add --no-cache wireguard-tools iputils
-
+RUN apk add --no-cache iputils
 COPY package*.json ./
 RUN npm install
-
 COPY . .
-RUN npm run build
-
+RUN npm install -g tsx
 ENV NODE_ENV=production
 EXPOSE 4000
-
-CMD ["node", "dist/index.js"]
+CMD ["tsx", "src/index.ts"]
